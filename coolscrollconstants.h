@@ -4,8 +4,12 @@
 namespace CoolScroll {
 namespace Constants {
 
-    const char * const ACTION_ID = "CoolScroll.Action";
-    const char * const MENU_ID = "CoolScroll.Menu";
+    const char ACTION_ID[] = "CoolScroll.Action";
+    const char MENU_ID[] = "CoolScroll.Menu";
+    const char COOLSCROLL_SETTINGS_ID[] = "ZZ.CoolScroll Configuration";
+    const char COOLSCROLL_SETTINGS_CATEGORY[] = "XA.CoolScroll";
+    const char COOLSCROLL_SETTINGS_TR_CATEGORY[] = QT_TRANSLATE_NOOP("CoolScroll", "CoolScroll");
+    const char COOLSCROLL_SETTINGS_CATEGORY_ICON[] = "";
 
 } // namespace CoolScroll
 } // namespace Constants

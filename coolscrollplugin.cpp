@@ -40,9 +40,9 @@
 
 #include <texteditor/basetexteditor.h>
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QScrollBar>
-#include <QtGui/QPushButton>
+#include <QMainWindow>
+#include <QScrollBar>
+#include <QPushButton>
 
 #include <QtCore/QtPlugin>
 
@@ -52,7 +52,7 @@
 
 namespace
 {
-    const QString l_nSettingsGroup("CoolScroll");
+    const QString l_nSettingsGroup(QStringLiteral("CoolScroll"));
 }
 
 using namespace CoolScroll::Internal;
@@ -78,8 +78,7 @@ bool CoolScrollPlugin::initialize(const QStringList &arguments, QString *errorSt
     connect(settingsPage, SIGNAL(settingsChanged()), SLOT(settingChanged()));
     addAutoReleasedObject(settingsPage);
 
-    Core::EditorManager* em = Core::ICore::instance()->editorManager();
-    connect(em, SIGNAL(editorCreated(Core::IEditor*,QString)),
+    connect(Core::EditorManager::instance(), SIGNAL(editorCreated(Core::IEditor*,QString)),
                 SLOT(editorCreated(Core::IEditor*,QString)));
 
     return true;
@@ -130,9 +129,9 @@ void CoolScroll::Internal::CoolScrollPlugin::saveSettings()
 void CoolScroll::Internal::CoolScrollPlugin::settingChanged()
 {
     saveSettings();
-    Core::EditorManager* em = Core::ICore::instance()->editorManager();
+    Core::EditorManager* em = Core::EditorManager::instance();
 
-    QList<Core::IEditor*> editors = em->openedEditors();
+    QList<Core::IEditor*> editors = em->documentModel()->oneEditorForEachOpenedDocument();
     QList<Core::IEditor*>::iterator it = editors.begin();
     // editors will update settings after next opening
     for( ; it != editors.end(); ++it)

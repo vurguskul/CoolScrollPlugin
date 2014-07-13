@@ -28,10 +28,10 @@
 */
 
 #include "coolscrollbar.h"
-#include <QtGui/QPlainTextEdit>
-#include <QtGui/QTextBlock>
-#include <QtGui/QTextLayout>
-#include <QtGui/QTextDocumentFragment>
+#include <QPlainTextEdit>
+#include <QTextBlock>
+#include <QTextLayout>
+#include <QTextDocumentFragment>
 
 #include <QtGui/QPainter>
 #include <QApplication>

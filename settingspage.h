@@ -37,6 +37,9 @@
 
 class SettingsDialog;
 
+namespace CoolScroll {
+namespace Internal {
+
 class SettingsPage : public Core::IOptionsPage
 {
     Q_OBJECT
@@ -44,14 +47,7 @@ public:
     SettingsPage(QSharedPointer<CoolScrollbarSettings>& settings);
     ~SettingsPage();
 
-    QString id() const;
-    QString trName() const;
-    QString category() const;
-    QString trCategory() const;
-    QString displayName() const;
-    QIcon categoryIcon() const;
-    QString displayCategory() const;
-    QWidget *createPage(QWidget *parent);
+    QWidget *widget();
     void apply();
     void finish();
 
@@ -66,5 +62,7 @@ signals:
     void settingsChanged();
 
 };
+} // namespace Internal
+} // namespace CoolScroll
 
 #endif // SETTINGSPAGE_H

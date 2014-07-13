@@ -30,7 +30,7 @@
 #ifndef COOLSCROLLAREA_H
 #define COOLSCROLLAREA_H
 
-#include <QtGui/QScrollBar>
+#include <QScrollBar>
 #include <QtGui/QPixmap>
 #include <QTextCharFormat>
 

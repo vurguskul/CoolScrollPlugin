@@ -30,12 +30,12 @@
 
 namespace
 {
-    const QString l_nWidth("scrollbar_width");
-    const QString l_nVieportColor("vieport_color");
-    const QString l_nSelectionColor("selection_color");
-    const QString l_nXScale("x_default_scale");
-    const QString l_nYScale("y_default_scale");
-    const QString l_nContextMenu("disable_context_menu");
+    const QString l_nWidth(QStringLiteral("scrollbar_width"));
+    const QString l_nVieportColor(QStringLiteral("vieport_color"));
+    const QString l_nSelectionColor(QStringLiteral("selection_color"));
+    const QString l_nXScale(QStringLiteral("x_default_scale"));
+    const QString l_nYScale(QStringLiteral("y_default_scale"));
+    const QString l_nContextMenu(QStringLiteral("disable_context_menu"));
 }
 
 CoolScrollbarSettings::CoolScrollbarSettings() :
@@ -49,7 +49,7 @@ CoolScrollbarSettings::CoolScrollbarSettings() :
 {
     m_font.setPointSizeF(1.5);
     m_font.setStyleHint(QFont::Monospace);
-    m_font.setFamily("inconsolata");
+    m_font.setFamily(QStringLiteral("inconsolata"));
     m_font.setBold(true);
     m_font.setStyleStrategy(QFont::NoAntialias);
 

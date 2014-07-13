@@ -34,9 +34,10 @@ isEmpty(IDE_BUILD_TREE):IDE_BUILD_TREE=/home/diver/work/qtcreator-build-desktop
 
 PROVIDER = Zhuk
 
+##include($$QTCREATOR_SOURCES/src/qtcreatorplugin.pri)
+#include($$QTCREATOR_SOURCES/src/plugins/coreplugin/coreplugin.pri)
+#include($$QTCREATOR_SOURCES/src/plugins/texteditor/texteditor.pri)
 include($$QTCREATOR_SOURCES/src/qtcreatorplugin.pri)
-include($$QTCREATOR_SOURCES/src/plugins/coreplugin/coreplugin.pri)
-include($$QTCREATOR_SOURCES/src/plugins/texteditor/texteditor.pri)
 
 LIBS += -L$$IDE_PLUGIN_PATH/Nokia
 
