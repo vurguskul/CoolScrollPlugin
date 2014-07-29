@@ -105,8 +105,10 @@ void CoolScrollPlugin::editorCreated(Core::IEditor *editor, const QString &fileN
     TextEditor::BaseTextEditorWidget* baseEditor = qobject_cast<TextEditor::BaseTextEditorWidget*>
                                                    (editor->widget());
 
-    baseEditor->setVerticalScrollBar(new CoolScrollBar(baseEditor, m_settings));
-
+    if (nullptr != baseEditor)
+    {
+        baseEditor->setVerticalScrollBar(new CoolScrollBar(baseEditor, m_settings));
+    }
 }
 
 void CoolScroll::Internal::CoolScrollPlugin::readSettings()
