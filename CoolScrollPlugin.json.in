@@ -1,0 +1,11 @@
+{
+    \"Name\" : \"CoolScrollPlugin\",
+    \"Version\" : \"0.0.3\",
+    \"CompatVersion\" : \"0.0.3\",
+    \"Vendor\" : \"Egor Zhuk\",
+    \"Copyright\" : \"(C) Egor Zhuk\",
+    \"License\" : \"MIT\",
+    \"Description\" : \"This plugin replaces a default scroll bar with a small content map of a currently opended file. Inspired by RockScroll from MS VisualStudio.\",
+    \"Url\" : \"\",
+    $$dependencyList
+}

@@ -1,9 +1,0 @@
-<plugin name=\"CoolScroll\" version=\"0.0.2\" compatVersion=\"0.0.2\">
-    <vendor>Zhuk</vendor>
-    <copyright>(C) Zhuk Egor</copyright>
-    <license>LGPL</license>
-    <description>Plugin replaces default scollbar in editor</description>
-    <url></url>
-    $$dependencyList
-</plugin>
-

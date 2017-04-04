@@ -1,5 +1,5 @@
-TARGET = CoolScroll
-TEMPLATE = lib
+##TARGET = CoolScroll
+##TEMPLATE = lib
 
 DEFINES += COOLSCROLL_LIBRARY
 
@@ -19,27 +19,38 @@ HEADERS += coolscrollplugin.h\
     settingspage.h \
     settingsdialog.h
 
-OTHER_FILES = CoolScroll.pluginspec
-
-
 # Qt Creator linking
 
-## set the QTC_SOURCE environment variable to override the setting here
-QTCREATOR_SOURCES = $$(QTC_SOURCE)
-isEmpty(QTCREATOR_SOURCES):QTCREATOR_SOURCES=/home/diver/work/qt-creator
+## Either set the IDE_SOURCE_TREE when running qmake,
+## or set the QTC_SOURCE environment variable, to override the default setting
+isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = $$(QTC_SOURCE)
+isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = "/home/diver/software/qt-creator"
 
-## set the QTC_BUILD environment variable to override the setting here
-IDE_BUILD_TREE = $$(QTC_BUILD)
-isEmpty(IDE_BUILD_TREE):IDE_BUILD_TREE=/home/diver/work/qtcreator-build-desktop
-
-PROVIDER = Zhuk
+## Either set the IDE_BUILD_TREE when running qmake,
+## or set the QTC_BUILD environment variable, to override the default setting
+isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = $$(QTC_BUILD)
+isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/home/diver/software/qt-creator"
 
 ##include($$QTCREATOR_SOURCES/src/qtcreatorplugin.pri)
 #include($$QTCREATOR_SOURCES/src/plugins/coreplugin/coreplugin.pri)
 #include($$QTCREATOR_SOURCES/src/plugins/texteditor/texteditor.pri)
-include($$QTCREATOR_SOURCES/src/qtcreatorplugin.pri)
-
-LIBS += -L$$IDE_PLUGIN_PATH/Nokia
 
 FORMS += \
     settingsdialog.ui
+
+QTC_PLUGIN_NAME = CoolScrollPlugin
+QTC_LIB_DEPENDS += \
+# nothing here at this time
+
+QTC_PLUGIN_DEPENDS += \
+	coreplugin
+
+QTC_PLUGIN_RECOMMENDS += \
+	# optional plugin dependencies. nothing here at this time
+
+###### End _dependencies.pri contents ######
+
+QMAKE_CXXFLAGS += -std=c++14
+
+include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
+

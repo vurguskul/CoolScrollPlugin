@@ -1,4 +1,3 @@
-QTC_PLUGIN_NAME = CoolScroll 
 QTC_LIB_DEPENDS += \
     aggregation \
     extensionsystem \
