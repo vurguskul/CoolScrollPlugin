@@ -36,9 +36,11 @@
 #include <coreplugin/editormanager/ieditor.h>
 
 #include <QSharedPointer>
+#include <unordered_map>
 
 class CoolScrollbarSettings;
 class CoolScrollBar;
+class QScrollBar;
 
 namespace CoolScroll {
 namespace Internal {
@@ -46,7 +48,7 @@ namespace Internal {
 class CoolScrollPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin")
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "CoolScrollPlugin.json")
 public:
     CoolScrollPlugin();
     ~CoolScrollPlugin();
@@ -60,13 +62,18 @@ private:
     void readSettings();
     void saveSettings();
 
-    static CoolScrollBar* getEditorScrollBar(Core::IEditor* editor);
 
     QSharedPointer<CoolScrollbarSettings> m_settings;
 
+    CoolScrollBar* scrollBarForEditor(Core::IEditor* editor);
+    std::unordered_map<Core::IEditor*, CoolScrollBar*> m_openedEditorsScrollbarsMap;
+
 private slots:
 
-    void editorCreated(Core::IEditor *editor, const QString &fileName);
+    void editorCreated(Core::IEditor* editor, const QString& fileName);
+    void currentEditorAboutToChange(Core::IEditor *editor);
+    void currentEditorChanged(Core::IEditor *editor);
+    void editorAboutToClose(Core::IEditor *editor);
     void settingChanged();
 };
 

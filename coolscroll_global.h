@@ -1,7 +1,7 @@
 #ifndef COOLSCROLL_GLOBAL_H
 #define COOLSCROLL_GLOBAL_H
 
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 #if defined(COOLSCROLL_LIBRARY)
 #  define COOLSCROLLSHARED_EXPORT Q_DECL_EXPORT

@@ -55,12 +55,12 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->xScaleSpinBox, SIGNAL(valueChanged(double)), SLOT(settingsChanged()));
     connect(ui->contextMenuCheckBox, SIGNAL(stateChanged(int)), SLOT(settingsChanged()));
 }
-////////////////////////////////////////////////////////////////////////////
+
 SettingsDialog::~SettingsDialog()
 {
     delete ui;
 }
-////////////////////////////////////////////////////////////////////////////
+
 void SettingsDialog::setSettings(const CoolScrollbarSettings &settings)
 {
     ui->widthSpinBox->setValue(settings.scrollBarWidth);
@@ -71,7 +71,7 @@ void SettingsDialog::setSettings(const CoolScrollbarSettings &settings)
     ui->yScaleSpinBox->setValue(settings.yDefaultScale);
     ui->contextMenuCheckBox->setChecked(!settings.disableContextMenu);
 }
-////////////////////////////////////////////////////////////////////////////
+
 void SettingsDialog::colorSettingsButtonClicked()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
@@ -88,19 +88,19 @@ void SettingsDialog::colorSettingsButtonClicked()
         }
     }
 }
-////////////////////////////////////////////////////////////////////////////
+
 void SettingsDialog::setButtonColor(QPushButton *button, const QColor &color)
 {
     QPalette p;
     p.setBrush(QPalette::Button, color);
     button->setPalette(p);
 }
-////////////////////////////////////////////////////////////////////////////
+
 QColor SettingsDialog::getButtonColor(QPushButton *button)
 {
     return button->palette().button().color();
 }
-////////////////////////////////////////////////////////////////////////////
+
 void SettingsDialog::getSettings(CoolScrollbarSettings &settings) const
 {
     settings.scrollBarWidth = ui->widthSpinBox->value();
@@ -110,7 +110,7 @@ void SettingsDialog::getSettings(CoolScrollbarSettings &settings) const
     settings.yDefaultScale = ui->yScaleSpinBox->value();
     settings.disableContextMenu = !ui->contextMenuCheckBox->isChecked();
 }
-////////////////////////////////////////////////////////////////////////////
+
 void SettingsDialog::settingsChanged()
 {
     m_settingsChanged = true;

@@ -44,11 +44,11 @@ SettingsPage::SettingsPage(QSharedPointer<CoolScrollbarSettings>& settings) :
     //setCategoryIcon(Constants::COOLSCROLL_SETTINGS_CATEGORY_ICON); // TODO: icon
     setDisplayName(tr("CoolScroll Configuration"));
 }
-////////////////////////////////////////////////////////////////////////////
+
 SettingsPage::~SettingsPage()
 {
 }
-////////////////////////////////////////////////////////////////////////////
+
 void SettingsPage::apply()
 {
     if(m_dialog->isSettingsChanged())
@@ -57,12 +57,12 @@ void SettingsPage::apply()
         emit settingsChanged();
     }
 }
-////////////////////////////////////////////////////////////////////////////
+
 void SettingsPage::finish()
 {
     // nothing
 }
-////////////////////////////////////////////////////////////////////////////
+
 QWidget * SettingsPage::widget()
 {
     m_dialog = new SettingsDialog();

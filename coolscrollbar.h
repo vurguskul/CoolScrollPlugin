@@ -33,10 +33,13 @@
 #include <QScrollBar>
 #include <QtGui/QPixmap>
 #include <QTextCharFormat>
+#include <QTextDocument>
+
+#include <experimental/optional>
 
 namespace TextEditor
 {
-    class BaseTextEditorWidget;
+    class TextEditorWidget;
 }
 
 class CoolScrollbarSettings;
@@ -46,11 +49,15 @@ class CoolScrollBar : public QScrollBar
 {
     Q_OBJECT
 public:
-    CoolScrollBar(TextEditor::BaseTextEditorWidget* edit,
+    CoolScrollBar(TextEditor::TextEditorWidget* edit,
                   QSharedPointer<CoolScrollbarSettings>& settings);
 
-    void markStateDirty() { m_stateDirty = true; }
-    void fullUpdateSettings();
+    ~CoolScrollBar();
+
+    void applySettings();
+
+    void activate();
+    void deactivate();
 
 protected:
 
@@ -77,10 +84,8 @@ protected:
     const QTextDocument& originalDocument() const;
 
     // access to a copy of original document
-    inline QTextDocument& internalDocument() { return *m_internalDocument; }
-    inline const QTextDocument& internalDocument() const { return *m_internalDocument; }
-
-    void applySettingsToDocument(QTextDocument& doc) const;
+    QTextDocument* internalDocument();
+    const QTextDocument* internalDocument() const;
 
     bool eventFilter(QObject *obj, QEvent *e);
 
@@ -91,36 +96,39 @@ protected slots:
 
 private:
 
-    void drawPreview(QPainter& p);
-    void drawSelections(QPainter& p);
-    void drawViewportRect(QPainter& p);
+    struct CoolScrallBarRenderData
+    {
+        CoolScrallBarRenderData() : currentDocumentCopy(nullptr) {}
+        ~CoolScrallBarRenderData()
+        {
+            if (currentDocumentCopy)
+                delete currentDocumentCopy;
+            selectedAreas.clear();
+        }
+        QPixmap         contentPixmap;
+        QVector<QRectF> selectedAreas;
+        QTextDocument*  currentDocumentCopy;
 
-    void updatePicture();
+    };
 
-    void updateScaleFactors();
 
     int posToScrollValue(qreal pos) const;
 
-    void highlightSelectedWord();
     void clearHighlight();
-    void highlightEntryInDocument(const QString& str);
+    void highlightEntryInDocument(const QString& stringToHighlight);
+    void recreatePixmap();
 
-    TextEditor::BaseTextEditorWidget* m_parentEdit;
+    TextEditor::TextEditorWidget* m_parentEdit;
     const QSharedPointer<CoolScrollbarSettings> m_settings;
 
-    // this parameter is <1.0 if file is to large
-    qreal m_yAdditionalScale;
-    QTextDocument* m_internalDocument;
-
-    QPixmap m_previewPic;
-    QVector<QRectF> m_selectionRects;
+    qreal m_yAdditionalScale; // this paramter is <1.0 if file is to large
 
     QString m_stringToHighlight;
 
     bool m_highlightNextSelection;
     bool m_leftButtonPressed;
 
-    bool m_stateDirty;
+    CoolScrallBarRenderData* m_renderData;
 
 };
 

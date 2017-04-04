@@ -38,13 +38,14 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
 
-#include <texteditor/basetexteditor.h>
+#include <texteditor/texteditor.h>
 
 #include <QMainWindow>
 #include <QScrollBar>
 #include <QPushButton>
 
 #include <QtCore/QtPlugin>
+#include <iostream>
 
 #include "coolscrollbarsettings.h"
 #include "coolscrollbar.h"
@@ -58,6 +59,7 @@ namespace
 using namespace CoolScroll::Internal;
 
 CoolScrollPlugin::CoolScrollPlugin() :
+    ExtensionSystem::IPlugin(),
     m_settings(new CoolScrollbarSettings)
 {
     readSettings();
@@ -78,8 +80,14 @@ bool CoolScrollPlugin::initialize(const QStringList &arguments, QString *errorSt
     connect(settingsPage, SIGNAL(settingsChanged()), SLOT(settingChanged()));
     addAutoReleasedObject(settingsPage);
 
-    connect(Core::EditorManager::instance(), SIGNAL(editorCreated(Core::IEditor*,QString)),
-                SLOT(editorCreated(Core::IEditor*,QString)));
+    connect(Core::EditorManager::instance(), SIGNAL(currentEditorChanged(Core::IEditor*)),
+                                               SLOT(currentEditorChanged(Core::IEditor*)));
+    connect(Core::EditorManager::instance(), SIGNAL(editorAboutToClose(Core::IEditor*)),
+                                               SLOT(editorAboutToClose(Core::IEditor*)));
+    connect(Core::EditorManager::instance(), SIGNAL(editorCreated(Core::IEditor*, QString)),
+                                               SLOT(editorCreated(Core::IEditor*, QString)));
+    connect(Core::EditorManager::instance(), SIGNAL(currentEditorAboutToChange(Core::IEditor*)),
+                                               SLOT(currentEditorAboutToChange(Core::IEditor*)));
 
     return true;
 }
@@ -96,18 +104,53 @@ ExtensionSystem::IPlugin::ShutdownFlag CoolScrollPlugin::aboutToShutdown()
     // Save settings
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
+    disconnect(Core::EditorManager::instance(), 0, this, 0);
+    m_openedEditorsScrollbarsMap.clear();
+    saveSettings();
     return SynchronousShutdown;
 }
+
 
 void CoolScrollPlugin::editorCreated(Core::IEditor *editor, const QString &fileName)
 {
     Q_UNUSED(fileName);
-    TextEditor::BaseTextEditorWidget* baseEditor = qobject_cast<TextEditor::BaseTextEditorWidget*>
-                                                   (editor->widget());
 
-    if (nullptr != baseEditor)
+    TextEditor::TextEditorWidget* newEditor = qobject_cast<TextEditor::TextEditorWidget*>(editor->widget());
+    if (newEditor)
     {
-        baseEditor->setVerticalScrollBar(new CoolScrollBar(baseEditor, m_settings));
+        CoolScrollBar* newScrollBar = new CoolScrollBar(newEditor, m_settings);
+        m_openedEditorsScrollbarsMap.insert( { editor , newScrollBar } );
+        newEditor->setVerticalScrollBar(newScrollBar);
+    }
+}
+
+void CoolScrollPlugin::currentEditorAboutToChange(Core::IEditor *editor)
+{
+    if (m_openedEditorsScrollbarsMap.find(editor) != m_openedEditorsScrollbarsMap.end())
+    {
+        qDebug() << "deactivate...";
+        m_openedEditorsScrollbarsMap[editor]->deactivate();
+    }
+}
+
+void CoolScrollPlugin::currentEditorChanged(Core::IEditor *editor)
+{
+    if (editor != nullptr)
+    {
+        auto lookupIter = m_openedEditorsScrollbarsMap.find(editor);
+        if (lookupIter != m_openedEditorsScrollbarsMap.end())
+        {
+            lookupIter->second->activate();
+        }
+    }
+}
+
+void CoolScrollPlugin::editorAboutToClose(Core::IEditor *editor)
+{
+    auto lookupIter = m_openedEditorsScrollbarsMap.find(editor);
+    if (lookupIter != m_openedEditorsScrollbarsMap.end())
+    {
+        m_openedEditorsScrollbarsMap.erase(lookupIter);
     }
 }
 
@@ -128,32 +171,43 @@ void CoolScroll::Internal::CoolScrollPlugin::saveSettings()
     settings->sync();
 }
 
+CoolScrollBar *CoolScrollPlugin::scrollBarForEditor(Core::IEditor *editor)
+{
+    if (m_openedEditorsScrollbarsMap.find(editor) != m_openedEditorsScrollbarsMap.end())
+    {
+        return m_openedEditorsScrollbarsMap[editor];
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+
 void CoolScroll::Internal::CoolScrollPlugin::settingChanged()
 {
     saveSettings();
     Core::EditorManager* em = Core::EditorManager::instance();
-
-    QList<Core::IEditor*> editors = em->documentModel()->oneEditorForEachOpenedDocument();
-    QList<Core::IEditor*>::iterator it = editors.begin();
-    // editors will update settings after next opening
-    for( ; it != editors.end(); ++it)
+    auto lookupCurrent = m_openedEditorsScrollbarsMap.find(em->currentEditor());
+    if (lookupCurrent != m_openedEditorsScrollbarsMap.end())
     {
-        CoolScrollBar* bar = getEditorScrollBar(*it);
-        Q_ASSERT(bar);
-        bar->markStateDirty();
+        lookupCurrent->second->applySettings();
     }
-    // update current editor right now
-    CoolScrollBar* bar = getEditorScrollBar(em->currentEditor());
-    Q_ASSERT(bar);
-    bar->fullUpdateSettings();
+
+//    QList<Core::IEditor*> editors = em->documentModel()->oneEditorForEachOpenedDocument();
+//    QList<Core::IEditor*>::iterator it = editors.begin();
+//    // editors will update settings after next opening
+//    for( ; it != editors.end(); ++it)
+//    {
+//        CoolScrollBar* bar = getEditorScrollBar(*it);
+//        Q_ASSERT(bar);
+//        bar->markStateDirty();
+//    }
+//    // update current editor right now
+//    CoolScrollBar* bar = getEditorScrollBar(em->currentEditor());
+//    Q_ASSERT(bar);
+//    bar->fullUpdateSettings();
+//    mCoolScrollBar->fullUpdateSettings();
 }
 
-
-CoolScrollBar * CoolScrollPlugin::getEditorScrollBar(Core::IEditor *editor)
-{
-    TextEditor::BaseTextEditorWidget* baseEditor = qobject_cast<TextEditor::BaseTextEditorWidget*>
-                                                                (editor->widget());
-    return qobject_cast<CoolScrollBar*>(baseEditor->verticalScrollBar());
-}
-
-Q_EXPORT_PLUGIN2(CoolScroll, CoolScrollPlugin)
+//Q_EXPORT_PLUGIN2(CoolScroll, CoolScrollPlugin)
