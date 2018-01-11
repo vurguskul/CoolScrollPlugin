@@ -58,14 +58,13 @@ public:
     ShutdownFlag aboutToShutdown();
 
 private:
-
     void readSettings();
     void saveSettings();
-
 
     QSharedPointer<CoolScrollbarSettings> m_settings;
 
     CoolScrollBar* scrollBarForEditor(Core::IEditor* editor);
+
     std::unordered_map<Core::IEditor*, CoolScrollBar*> m_openedEditorsScrollbarsMap;
 
 private slots:

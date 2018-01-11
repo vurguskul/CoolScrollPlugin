@@ -39,6 +39,7 @@
 #include <coreplugin/coreconstants.h>
 
 #include <texteditor/texteditor.h>
+#include <texteditor/texteditorsettings.h>
 
 #include <QMainWindow>
 #include <QScrollBar>
@@ -209,5 +210,3 @@ void CoolScroll::Internal::CoolScrollPlugin::settingChanged()
 //    bar->fullUpdateSettings();
 //    mCoolScrollBar->fullUpdateSettings();
 }
-
-//Q_EXPORT_PLUGIN2(CoolScroll, CoolScrollPlugin)

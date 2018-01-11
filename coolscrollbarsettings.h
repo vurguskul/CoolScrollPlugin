@@ -51,8 +51,7 @@ public:
     qreal yDefaultScale;
     bool disableContextMenu;
 
-    // this options cannot be changed by user
-    QFont m_font;
+    // these options cannot be changed by user
     qreal m_minSelectionHeight;
     QTextOption m_textOption;
 

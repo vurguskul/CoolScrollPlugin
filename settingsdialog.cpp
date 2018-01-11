@@ -39,11 +39,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->setupUi(this);
 
     ui->widthSpinBox->setRange(5, 400);
-    ui->xScaleSpinBox->setRange(0.3, 5.0);
-    ui->xScaleSpinBox->setSingleStep(0.05);
 
-    ui->yScaleSpinBox->setRange(0.3, 5.0);
-    ui->yScaleSpinBox->setSingleStep(0.05);
 
     connect(ui->vieportColotButton, SIGNAL(clicked()),
                                     SLOT(colorSettingsButtonClicked()));
@@ -51,8 +47,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
                                       SLOT(colorSettingsButtonClicked()));
 
     connect(ui->widthSpinBox, SIGNAL(valueChanged(int)), SLOT(settingsChanged()));
-    connect(ui->yScaleSpinBox, SIGNAL(valueChanged(double)), SLOT(settingsChanged()));
-    connect(ui->xScaleSpinBox, SIGNAL(valueChanged(double)), SLOT(settingsChanged()));
+
     connect(ui->contextMenuCheckBox, SIGNAL(stateChanged(int)), SLOT(settingsChanged()));
 }
 
@@ -67,8 +62,6 @@ void SettingsDialog::setSettings(const CoolScrollbarSettings &settings)
     setButtonColor(ui->vieportColotButton, settings.viewportColor);
     setButtonColor(ui->selectionColorButton,settings.selectionHighlightColor);
 
-    ui->xScaleSpinBox->setValue(settings.xDefaultScale);
-    ui->yScaleSpinBox->setValue(settings.yDefaultScale);
     ui->contextMenuCheckBox->setChecked(!settings.disableContextMenu);
 }
 
@@ -106,8 +99,6 @@ void SettingsDialog::getSettings(CoolScrollbarSettings &settings) const
     settings.scrollBarWidth = ui->widthSpinBox->value();
     settings.viewportColor = getButtonColor(ui->vieportColotButton);
     settings.selectionHighlightColor = getButtonColor(ui->selectionColorButton);
-    settings.xDefaultScale = ui->xScaleSpinBox->value();
-    settings.yDefaultScale = ui->yScaleSpinBox->value();
     settings.disableContextMenu = !ui->contextMenuCheckBox->isChecked();
 }
 

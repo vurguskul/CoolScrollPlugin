@@ -26,6 +26,7 @@
 * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *
 */
+
 #include "coolscrollbarsettings.h"
 
 namespace
@@ -39,7 +40,7 @@ namespace
 }
 
 CoolScrollbarSettings::CoolScrollbarSettings() :
-    scrollBarWidth(70),
+    scrollBarWidth(110),
     viewportColor(QColor(0, 0, 255, 20)),
     selectionHighlightColor(Qt::red),
     xDefaultScale(0.9),
@@ -47,12 +48,6 @@ CoolScrollbarSettings::CoolScrollbarSettings() :
     disableContextMenu(true),
     m_minSelectionHeight(1.5)
 {
-    m_font.setPointSizeF(1.5);
-    m_font.setStyleHint(QFont::Monospace);
-    m_font.setFamily(QStringLiteral("inconsolata"));
-    m_font.setBold(true);
-    m_font.setStyleStrategy(QFont::NoAntialias);
-
     m_textOption.setTabStop(2.0);
 }
 

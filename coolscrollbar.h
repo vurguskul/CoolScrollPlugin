@@ -40,6 +40,7 @@
 namespace TextEditor
 {
     class TextEditorWidget;
+    class TextDocument;
 }
 
 class CoolScrollbarSettings;
@@ -78,27 +79,25 @@ protected:
     qreal calculateLineHeight() const;
 
     qreal getXScale() const;
-    qreal getYScale() const;
 
     // original document access
     const QTextDocument& originalDocument() const;
 
-    // access to a copy of original document
-    QTextDocument* internalDocument();
-    const QTextDocument* internalDocument() const;
-
     bool eventFilter(QObject *obj, QEvent *e);
+
+    void drawDocumentPreview(QPainter& p, const TextEditor::TextDocument& document);
 
 protected slots:
 
     void documentContentChanged();
     void documentSelectionChanged();
+    void documentSizeChanged(const QSizeF);
 
 private:
 
     struct CoolScrallBarRenderData
     {
-        CoolScrallBarRenderData() : currentDocumentCopy(nullptr) {}
+        CoolScrallBarRenderData();
         ~CoolScrallBarRenderData()
         {
             if (currentDocumentCopy)
@@ -107,8 +106,8 @@ private:
         }
         QPixmap         contentPixmap;
         QVector<QRectF> selectedAreas;
-        QTextDocument*  currentDocumentCopy;
-
+        QTextDocument*  currentDocumentCopy = nullptr;
+        QFont           font;
     };
 
 
@@ -116,7 +115,8 @@ private:
 
     void clearHighlight();
     void highlightEntryInDocument(const QString& stringToHighlight);
-    void recreatePixmap();
+
+    bool hasHighlight() const;
 
     TextEditor::TextEditorWidget* m_parentEdit;
     const QSharedPointer<CoolScrollbarSettings> m_settings;
@@ -130,6 +130,7 @@ private:
 
     CoolScrallBarRenderData* m_renderData;
 
+    void updateYScale();
 };
 
 #endif // COOLSCROLLAREA_H
